@@ -3,23 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kevin Steve 722 的开发者博客</title>
+  <title>Kevin Steve 772 的开发者博客</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <div class="brand">
-        <h1>Kevin Steve 722</h1>
-        <p>个人博客</p>
+      <div class="split-nav">
+        <div class="split-nav-group split-nav-left">
+          <button class="nav-icon" aria-label="展开站点标题">👤</button>
+          <nav class="main-nav left-nav" id="leftNav">
+            <a href="#home">Kevin Steve 772</a>
+            <a href="#home" class="nav-subtitle">个人博客</a>
+          </nav>
+        </div>
+        <div class="split-nav-group split-nav-right">
+          <button class="nav-icon" aria-label="展开右侧导航">⫶</button>
+          <nav class="main-nav right-nav" id="rightNav">
+            <a href="#home">首页</a>
+            <a href="#posts">博客</a>
+            <a href="#about">关于</a>
+            <a href="#contact">联系</a>
+          </nav>
+        </div>
       </div>
-      <nav class="main-nav" id="mainNav">
-        <a href="#home">首页</a>
-        <a href="#posts">博客</a>
-        <a href="#about">关于</a>
-        <a href="#contact">联系</a>
-      </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="切换导航">☰</button>
     </div>
   </header>
 
@@ -29,6 +36,18 @@
         <h2>欢迎来到我的开发者博客</h2>
         <p>这里分享前端实践、开发经验、工具推荐和个人项目进展。</p>
         <a class="btn btn-primary" href="#posts">阅读最新文章</a>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <h2>最近的新项目</h2>
+          <p>一些我最近在开发或发布的小项目，欢迎查看和在 GitHub 上提交 Issue。</p>
+        </div>
+        <div class="post-grid projects-grid" id="projectsList">
+          <!-- 项目列表由 script.js 渲染 -->
+        </div>
       </div>
     </section>
 
@@ -61,38 +80,17 @@
       </div>
     </section>
 
-    <section class="section feature-section">
-      <div class="container feature-grid">
-        <div class="feature-card">
-          <h3>项目展示</h3>
-          <p>展示开源项目、实践案例与技术栈选择，帮助你快速了解我的工作风格。</p>
-        </div>
-        <div class="feature-card">
-          <h3>技术总结</h3>
-          <p>总结高效开发经验、性能优化方案和团队协作方法。</p>
-        </div>
-        <div class="feature-card">
-          <h3>学习笔记</h3>
-          <p>记录新技术学习过程、问题解决思路以及实战技巧。</p>
-        </div>
-      </div>
-    </section>
-
     <section class="section about-section" id="about">
       <div class="container about-inner">
         <div class="about-text">
           <h2>关于我</h2>
-          <p>我是 <strong>Kevin Steve 722</strong>，专注于前端开发与用户体验，喜欢把复杂问题拆解为简单、可执行的解决方案。</p>
-          <p>我热爱学习新技术，分享开发心得，并通过博客记录每一次成长。</p>
+          <p>我是 <strong>Kevin Steve 772</strong>，一个来自中国的C++开发者。</p>
+          <p>喜欢开发基于终端界面的应用程序。</p>
         </div>
         <div class="about-stats">
           <div class="stat-card">
             <strong>5+</strong>
             <span>年开发经验</span>
-          </div>
-          <div class="stat-card">
-            <strong>20+</strong>
-            <span>篇技术文章</span>
           </div>
           <div class="stat-card">
             <strong>Github</strong>
@@ -111,11 +109,11 @@
         <div class="contact-cards">
           <div class="contact-card">
             <strong>Email</strong>
-            <p>kevin202634@outlook.com</p>
+            <p><a href="mailto:kevin202634@outlook.com" target="_blank" rel="noreferrer">kevin202634@outlook.com</a></p>
           </div>
           <div class="contact-card">
             <strong>GitHub</strong>
-            <p><a href="https://github.com/kevin-steve722" target="_blank" rel="noreferrer">github.com/kevin-steve722</a></p>
+            <p><a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer">github.com/kevin-steve772</a></p>
           </div>
         </div>
       </div>
@@ -124,7 +122,7 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© <span id="currentYear"></span> Kevin Steve 722 | 开发者个人博客</p>
+      <p>© <span id="currentYear"></span> Kevin Steve 772 | 开发者个人博客</p>
     </div>
   </footer>
 
