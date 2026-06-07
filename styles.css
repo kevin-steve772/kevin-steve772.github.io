@@ -242,7 +242,8 @@ a {
 .post-card,
 .feature-card,
 .contact-card,
-.stat-card {
+.stat-card,
+.article-page {
   background: rgba(9, 15, 24, 0.95);
   border: 1px solid rgba(148, 163, 184, 0.08);
   border-radius: 20px;
@@ -253,6 +254,52 @@ a {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.article-reading-section {
+  padding-top: 2rem;
+}
+
+.article-page {
+  display: none;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.article-page:target {
+  display: block;
+}
+
+.article-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.article-header h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+}
+
+.article-meta {
+  color: #9fb4c8;
+  font-size: 0.95rem;
+}
+
+.article-body {
+  color: #d9e2ec;
+  line-height: 1.8;
+}
+
+.article-body p {
+  margin: 0 0 1rem;
+}
+
+.back-link {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  color: #58a6ff;
+  font-weight: 600;
 }
 
 .post-tag {
