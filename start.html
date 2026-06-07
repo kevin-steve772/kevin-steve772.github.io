@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kevin Steve 772 - 启动中...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .boot-screen {
+      width: 100%;
+      max-width: 800px;
+      padding: 2rem;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+
+    .boot-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+      font-size: 24px;
+      letter-spacing: 4px;
+      animation: flicker 0.15s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 0, 0.8); }
+      50% { text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 200, 0, 0.6); }
+    }
+
+    .boot-log {
+      margin-bottom: 2rem;
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #0f0;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+
+    .log-line {
+      margin-bottom: 0.5rem;
+      word-break: break-all;
+      opacity: 0;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .log-line.success {
+      color: #0f0;
+    }
+
+    .log-line.warning {
+      color: #ff0;
+    }
+
+    .log-line.error {
+      color: #f00;
+    }
+
+    .log-line.info {
+      color: #0ff;
+    }
+
+    .progress-container {
+      margin-bottom: 2rem;
+    }
+
+    .progress-label {
+      margin-bottom: 0.5rem;
+      font-size: 12px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: #111;
+      border: 1px solid #0f0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0f0, #0ff);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+    }
+
+    .boot-commands {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .boot-btn {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .boot-btn:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+
+    .boot-btn:active {
+      transform: scale(0.98);
+    }
+
+    .boot-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .boot-btn.disabled:hover {
+      background: transparent;
+      color: #0f0;
+      box-shadow: none;
+    }
+
+    .boot-status {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 12px;
+      color: #0f0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #0f0;
+      margin-left: 4px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .skip-indicator {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* 滚动条样式 */
+    .boot-log::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .boot-log::-webkit-scrollbar-track {
+      background: #111;
+    }
+
+    .boot-log::-webkit-scrollbar-thumb {
+      background: #0f0;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 12px;
+      }
+
+      .boot-screen {
+        padding: 1rem;
+      }
+
+      .boot-logo {
+        font-size: 18px;
+      }
+
+      .boot-log {
+        max-height: 200px;
+      }
+
+      .boot-commands {
+        gap: 0.5rem;
+      }
+
+      .boot-btn {
+        padding: 0.5rem 1rem;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="boot-screen">
+    <div class="boot-logo">
+      ┌─────────────────────────────────┐
+      │  DEBIAN 13 | Kevin Steve 772    │
+      └─────────────────────────────────┘
+    </div>
+
+    <div class="boot-log" id="bootLog"></div>
+
+    <div class="progress-container">
+      <div class="progress-label">系统初始化: <span id="progressPercent">0</span>%</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="boot-status" id="bootStatus">
+      正在启动系统<span class="cursor"></span>
+    </div>
+
+    <div class="boot-commands">
+      <button class="boot-btn disabled" id="continueBtn">继续 [Enter]</button>
+      <button class="boot-btn" id="skipBtn">跳过 [ESC]</button>
+    </div>
+
+    <div class="skip-indicator">
+      按 ESC 键可跳过启动画面
+    </div>
+  </div>
+
+  <script>
+    const bootLog = document.getElementById('bootLog');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const bootStatus = document.getElementById('bootStatus');
+    const continueBtn = document.getElementById('continueBtn');
+    const skipBtn = document.getElementById('skipBtn');
+
+    const bootMessages = [
+      { text: '[    0.000000] Linux version 6.1.0-13-generic (debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.39.1) #1-Debian SMP PREEMPT_DYNAMIC Debian 6.1.55-1 (2023-10-12)', type: 'info' },
+      { text: '[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.1.0-13-generic root=/dev/mapper/debian--vg-root ro quiet splash', type: 'info' },
+      { text: '[    0.000000] KERNEL supported cpus:', type: 'info' },
+      { text: '[    0.000000]   Intel GenuineIntel', type: 'info' },
+      { text: '[    0.000000]   AMD AuthenticAMD', type: 'info' },
+      { text: '[    0.025431] x86/fpu: Supporting XSAVE feature 0x001: "x87 floating point registers"', type: 'info' },
+      { text: '[    0.112847] Last level iTLB entries: 4KB 512, 2MB 1024, 4MB 512', type: 'info' },
+      { text: '[    0.182922] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1', type: 'info' },
+      { text: '[    1.234567] systemd[1]: systemd 252.12-1 running in system mode. (+PAM +AUDIT +SELINUX -APPARMOR +IMA +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD -SECCOMP -APPARMOR_RESTRICT_PARAMETERS -IMA_APPARMORLSM -IMA_READ_POLICY -IMA_MEASURE_PCRS +BLKID -CURL +ELFUTILS -FIDO2 +FSCK -FUZZ_SYSTEMD -ELF +GCRYPT +GNUTLS +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBIDN2 +LIBIPTC +LIBPAM +LIBPWQUALITY +LIBQRENCODE +LIBSECCOMP +LIBSELINUX -LIBAPPARMOR +LIBSYSTEMD +LIBUDEV +LIBXZ +LIBZSTD -LLMNR -LOGLEVEL_NOTICE +LOGIND -LSOF +LTO +MALLOC +MAXMEMBERS +MEMFD_CREATE +MULTIUSER +NETWORKMANAGER_SUPPORT -NLS -NSCD -NSS +OPENSSL +ORG_FREEDESKTOP_HOSTNAME_CONTROL +OPENSSL_API_COMPAT +OPENSSL_API_COMPAT_NO_STATIC_LIBS +OPENSSL_API_COMPAT_NO_SHARED_LIBS +OPENSSL_API_COMPAT_NO_FIPS +OPENSSL_API_COMPAT_NO_DSA +OPENSSL_API_COMPAT_NO_RC4 +PACCACHE +PAM +PCI +PCRE2 +PKCS11 +POLKIT +POSIX_MQUEUE +PSTORE +PWQUALITY +QRENCODE +RTAS +READLINE +REBOOT_KEXEC +REMOUNT_FS_RW +REPRODUCIBLE +RESTRICT_REALTIME +REVERT_DMESG +SECCOMP +SELINUX_DBUS +SELINUX_DBUS_CONTEXT +SELINUX_DBUS_LOAD_POLICY +SELINUX_DBUS_RELABEL_FILES +SELINUX_DBUS_SYNC_FS +SELINUX_DBUS_MOUNTPOINT +SELINUX_RESTRICT_REALTIME +SELINUX_RESTRICT_REALTIME_BPFFS +SELINUX_SYSFS_DENY_ACCESS +SELINUX_XEN +SENSITIVE +SFD_LOOP_CONFIGURE +SMACK +SORT +SPLICE +SPLIT_USR +SQLITE +SRTP +SSH +SSLVPN +SSLVPN_AES +SSLVPN_FORTUNA +SSLVPN_SYSTEM +STANDALONE_VLAN +STATE_MACHINE +STATES +STDATOMIC +STEADY_CLOCK +STATIC_LIB +STDIO +STORE_DIR +STREAMS +STRING_FORMATTING +STRIP +STUB +SUID +SUID_HARDENING +SUN_RPC +SYMLINK +SYSLOG +SYSLOG_CONSOLE +SYSCALL +SYSCALL_TRACE +SYSCTL +SYSFS +SYSFSWATCH +SYSINIFINISH +SYSINIT +SYSINFO +SYSCALL_TRACE_ENTER +SYSCALL_TRACE_EXIT +SYSFS_PATH +SYSLOGD +SYSRQ +SYSTEM +SYSTEMD +SYSTEMD_ANALYZE +SYSTEMD_ANALYZE_BLOCK +SYSTEMD_ANALYZE_CRITICAL_CHAIN +SYSTEMD_ANALYZE_DUMP +SYSTEMD_ANALYZE_PLOT +SYSTEMD_ANALYZE_VERIFY +SYSTEMD_BACKLIGHT +SYSTEMD_BINFMT +SYSTEMD_COREDUMP +SYSTEMD_CRYPTSETUP +SYSTEMD_CRYPTSETUP_GENERATOR +SYSTEMD_DEBUG_GENERATOR +SYSTEMD_DISSECT +SYSTEMD_DISSECT_VERITY +SYSTEMD_EFI_BOOT_GENERATOR +SYSTEMD_ENVIRONMENT_D_GENERATOR +SYSTEMD_FIRSTBOOT +SYSTEMD_FSCK +SYSTEMD_FSCK_ROOT +SYSTEMD_GENERATOR +SYSTEMD_GETTY +SYSTEMD_GPT_AUTO_GENERATOR +SYSTEMD_HALT +SYSTEMD_HIBERNATE +SYSTEMD_HIBERNATE_RESUME +SYSTEMD_HIBERNATE_RESUME_GENERATOR +SYSTEMD_HOSTNAME +SYSTEMD_IMPORT +SYSTEMD_IMPORT_CURL +SYSTEMD_IMPORT_BZIP2 +SYSTEMD_IMPORT_GPGWAIT +SYSTEMD_IMPORT_XZ +SYSTEMD_INITRD +SYSTEMD_INITRD_PARSE_RI +SYSTEMD_JOURNAL +SYSTEMD_JOURNAL_AUDIT +SYSTEMD_JOURNAL_GATEWAY +SYSTEMD_JOURNAL_GATEWAYD +SYSTEMD_JOURNAL_REMOTE +SYSTEMD_JOURNAL_UPLOAD +SYSTEMD_JSON +SYSTEMD_JOURNAL_GATEWAY +SYSTEMD_JSON +SYSTEMD_LOAD_CREDENTIALS +SYSTEMD_LOCALE +SYSTEMD_LOCALE_UTIL +SYSTEMD_LOGIND +SYSTEMD_MACHINE +SYSTEMD_MACHINE_ID_SETUP +SYSTEMD_MACHINE_ID_COMMIT +SYSTEMD_MACHINED +SYSTEMD_MACHINE_ID_MAP +SYSTEMD_MACHINE_ID_COMMIT +SYSTEMD_MACHINE_ID_SETUP +SYSTEMD_MACHINED +SYSTEMD_MAKE_ROOTFS +SYSTEMD_MAKEFS +SYSTEMD_MAKEFS_INITRAMFS +SYSTEMD_MANAGE_RESOLV_CONF +SYSTEMD_MEASURE_PARTITION +SYSTEMD_MKFS +SYSTEMD_MKFS_INITRAMFS +SYSTEMD_MOUNT +SYSTEMD_MOUNT_TMPFS +SYSTEMD_MOUNT_UTIL_LINUX +SYSTEMD_MOUNTINFOD +SYSTEMD_NETWORK_CONFIGURATOR +SYSTEMD_NETWORK_GENERATOR +SYSTEMD_NETWORKD +SYSTEMD_NSS +SYSTEMD_NSS_MYHOSTNAME +SYSTEMD_NSS_RESOLVE +SYSTEMD_NSS_SYSTEMD +SYSTEMD_NTP +SYSTEMD_NTP_DAEMON +SYSTEMD_NTP_SERVERS +SYSTEMD_NSPAWN +SYSTEMD_NSPAWN_CONTAINER +SYSTEMD_NSPAWN_DEVICE_NODE_MOUNT +SYSTEMD_NSPAWN_EXTRA_ARGUMENTS +SYSTEMD_NSPAWN_EXTRA_ARGUMENTS_A +SYSTEMD_NSPAWN_EXTRA_ARGUMENTS_B +SYSTEMD_NSPAWN_EXTRA_ARGUMENTS_C +SYSTEMD_NSPAWN_EXTRA_ARGUMENTS_D +SYSTEMD_NTP_FALLBACK +SYSTEMD_NTP_INIT_MAX_SYNC_TIME +SYSTEMD_NTP_INIT_MIN_FREQ +SYSTEMD_NTP_LT_ROOT +SYSTEMD_NTP_MAX_RETRIES +SYSTEMD_NTP_PERIOD_MAX +SYSTEMD_NTP_PERIOD_MIN +SYSTEMD_NTP_SYSTEM_SYNC_TIME_MAX_SLEEP_DEFAULT +SYSTEMD_NTP_SYSTEM_SYNC_TIME_MIN_SLEEP_DEFAULT +SYSTEMD_NTP_TIMEOUT_DEBUG +SYSTEMD_NTP_TIMEOUT_DEFAULT +SYSTEMD_NTP_TIMEOUT_DEBUG +SYSTEMD_NTP_VERSION_CHECK +SYSTEMD_NWORKD +SYSTEMD_NWORKD_DEFAULT_ROUTE_ONLY +SYSTEMD_NWORKD_DEFAULT_ROUTE_ONLY_FOR_STATIC_HOSTNAME +SYSTEMD_NWORKD_DEFAULT_ROUTE_ONLY_FOR_TRANSIENT_HOSTNAME +SYSTEMD_NWORKD_DEFAULT_ROUTE_ONLY_FOR_RUNTIME_HOSTNAME +SYSTEMD_PAGER +SYSTEMD_PAGER_LESS +SYSTEMD_PAGER_SHOW_WARNINGS +SYSTEMD_PAGER_ENVIRONMENT_STRIP +SYSTEMD_PAGER_SHOW_CURRENT_FILES +SYSTEMD_PAGER_POSITION_TOP +SYSTEMD_PAGER_SCROLL_ONLY +SYSTEMD_PAGER_LONG_FILE_NAMES +SYSTEMD_PAGER_LONG_FILE_NAMES_MAX_LEN +SYSTEMD_PAGER_LESS_ARGS +SYSTEMD_PAGER_USE_PEN +SYSTEMD_PAGER_WRAP_LONG_LINES +SYSTEMD_PAGER_WRAP_LONG_WORDS +SYSTEMD_PARTITION +SYSTEMD_PARTITION_DEFINITION_TOOL +SYSTEMD_PASSWORD_AGENT +SYSTEMD_PASSWORD_UTIL +SYSTEMD_PORTALS +SYSTEMD_POSIX_CLOCK_MONOTONIC_TIMER_THRESHOLD +SYSTEMD_POSIX_CLOCK_REALTIME_TIMER_THRESHOLD +SYSTEMD_POSIX_CLOCK_REALTIME_UPDATE +SYSTEMD_PRETTY_HOSTNAME +SYSTEMD_PRETTY_HOSTNAME_MAX_LEN +SYSTEMD_PROFILE +SYSTEMD_PROGRESS +SYSTEMD_PROGRESS_DRAW +SYSTEMD_PROGRESS_DOTS +SYSTEMD_PROGRESS_VERBOSE', type: 'info' },
+      { text: '[    1.456789] systemd[1]: Listening on initctl.socket - systemd initctl socket.', type: 'success' },
+      { text: '[    1.567890] systemd[1]: Listening on journal-dev-log.socket - Journal Socket (/dev/log).', type: 'success' },
+      { text: '[    1.678901] systemd[1]: Started systemd-journald.service - Journal Service.', type: 'success' },
+      { text: '[    1.789012] kernel: [drm] Initialized i915 1.6.0 20230427 for 0000:00:02.0 on minor 0', type: 'info' },
+      { text: '[    1.890123] systemd-journald[123]: Received request to flush runtime journal from PID 1', type: 'info' },
+      { text: '[    1.901234] Adding 2097148k swap on /swapfile.  Priority:-2 extents:4 across:2560000k FS', type: 'success' },
+      { text: '[    2.012345] EXT4-fs (dm-0): mounted filesystem with ordered data mode. Opts: (null)', type: 'success' },
+      { text: '[    2.123456] audit: type=1400 audit(1234567890.456:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="lxc-container-default" pid=456 comm="apparmor_parser"', type: 'info' },
+      { text: '[    2.234567] systemd[1]: Reached target local-fs.target - Local File Systems.', type: 'success' },
+      { text: '[    2.345678] systemd[1]: Starting systemd-tmpfiles-setup.service - Create List of Required /tmp and /var/tmp Directories...', type: 'info' },
+      { text: '[    2.456789] systemd[1]: Started systemd-tmpfiles-setup.service - Create List of Required /tmp and /var/tmp Directories.', type: 'success' },
+      { text: '[    2.567890] systemd[1]: Reached target swap.target - Swap.', type: 'success' },
+      { text: '[    2.678901] systemd[1]: Reached target basic.target - Basic System.', type: 'success' },
+      { text: '[    2.789012] systemd[1]: Starting systemd-user-sessions.service - Permit User Sessions...', type: 'info' },
+      { text: '[    2.890123] systemd[1]: Reached target multi-user.target - Multi-User System.', type: 'success' },
+      { text: '[    2.901234] systemd[1]: Reached target graphical.target - Graphical Interface.', type: 'success' },
+      { text: '[    3.012345] audit: type=1130 audit(1234567890.567:3): pid=1 uid=0 auid=4294967295 ses=4294967295 msg=\'unit=systemd-logind comm="systemd" exe="/lib/systemd/systemd" hostname=? addr=? terminal=? res=success\'', type: 'info' },
+      { text: '[    3.123456] audit: type=1130 audit(1234567890.678:4): pid=1 uid=0 auid=4294967295 ses=4294967295 msg=\'unit=systemd-user-sessions comm="systemd" exe="/lib/systemd/systemd" hostname=? addr=? terminal=? res=success\'', type: 'info' },
+      { text: '[    3.234567] audit: type=1130 audit(1234567890.789:5): pid=1 uid=0 auid=4294967295 ses=4294967295 msg=\'unit=getty@tty1 comm="systemd" exe="/lib/systemd/systemd" hostname=? addr=? terminal=? res=success\'', type: 'info' },
+    ];
+
+    const additionalMessages = [
+      { text: '正在加载个人资料...', type: 'info' },
+      { text: '正在初始化项目组件...', type: 'info' },
+      { text: '正在配置动画引擎...', type: 'success' },
+      { text: '正在加载样式表...', type: 'success' },
+      { text: '启动完成！', type: 'success' },
+    ];
+
+    let currentProgress = 0;
+    let messageIndex = 0;
+
+    function addLogLine(text, type = 'info') {
+      const line = document.createElement('div');
+      line.className = `log-line ${type}`;
+      line.textContent = text;
+      
+      const currentCount = bootLog.children.length;
+      line.style.animationDelay = `${currentCount * 0.05}s`;
+      
+      bootLog.appendChild(line);
+      
+      // 自动滚动到底部
+      bootLog.scrollTop = bootLog.scrollHeight;
+    }
+
+    function updateProgress(value) {
+      currentProgress = Math.min(value, 100);
+      progressFill.style.width = currentProgress + '%';
+      progressPercent.textContent = currentProgress;
+    }
+
+    function simulateBoot() {
+      // 添加 Debian 启动日志
+      bootMessages.forEach((msg, index) => {
+        setTimeout(() => {
+          addLogLine(msg.text, msg.type);
+          updateProgress(15 + (index / bootMessages.length) * 40);
+        }, index * 50);
+      });
+
+      // 添加自定义消息
+      setTimeout(() => {
+        additionalMessages.forEach((msg, index) => {
+          setTimeout(() => {
+            addLogLine(msg.text, msg.type);
+            updateProgress(55 + (index / additionalMessages.length) * 40);
+          }, index * 300);
+        });
+      }, bootMessages.length * 50);
+
+      // 完成启动
+      setTimeout(() => {
+        updateProgress(100);
+        bootStatus.innerHTML = '启动完成! <span class="cursor"></span>';
+        continueBtn.classList.remove('disabled');
+        continueBtn.textContent = '进入博客 [Enter]';
+        skipBtn.textContent = '立即进入 [ESC]';
+      }, bootMessages.length * 50 + additionalMessages.length * 300 + 500);
+    }
+
+    function goToHome() {
+      // 淡出效果
+      document.body.style.opacity = '1';
+      document.body.style.transition = 'opacity 0.5s ease-out';
+      document.body.style.opacity = '0';
+      
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 500);
+    }
+
+    // 事件监听
+    continueBtn.addEventListener('click', goToHome);
+    skipBtn.addEventListener('click', goToHome);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !continueBtn.classList.contains('disabled')) {
+        goToHome();
+      }
+      if (e.key === 'Escape') {
+        goToHome();
+      }
+    });
+
+    // 启动模拟
+    simulateBoot();
+  </script>
+</body>
+</html>
