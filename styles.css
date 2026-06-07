@@ -478,23 +478,23 @@ a {
   transform: translateY(0);
 }
 
-.scroll-reveal.scroll-delay-100 {
+.scroll-delay-100 {
   transition-delay: 0.08s;
 }
 
-.scroll-reveal.scroll-delay-200 {
+.scroll-delay-200 {
   transition-delay: 0.16s;
 }
 
-.scroll-reveal.scroll-delay-300 {
+.scroll-delay-300 {
   transition-delay: 0.24s;
 }
 
-.scroll-reveal.scroll-delay-400 {
+.scroll-delay-400 {
   transition-delay: 0.32s;
 }
 
-.scroll-reveal.scroll-delay-500 {
+.scroll-delay-500 {
   transition-delay: 0.4s;
 }
 

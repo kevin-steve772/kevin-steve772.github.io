@@ -24,12 +24,7 @@ function initScrollReveal() {
   revealElements.forEach(el => observer.observe(el));
 }
 
-// 确保在 DOM 加载完毕后初始化（处理脚本在 </body> 前的情况）
-if (document.readyState === 'loading') {
-  window.addEventListener('DOMContentLoaded', initScrollReveal);
-} else {
-  initScrollReveal();
-}
+window.addEventListener('DOMContentLoaded', initScrollReveal);
 
 // 渲染最近的新项目（如无 JS 则不会显示）
 const projects = [
@@ -43,7 +38,7 @@ const projects = [
     tag: '主页',
     title: 'kevin-steve-772.github.io',
     desc: '我的个人主页，完全开源。',
-    link: 'https://github.com/kevin-steve772/kevin-steve772.github.io'
+    link: 'https://github.com/kevin-steve772/kevin-steve722.github.io'
   },
   {
     tag: '敬请期待',
