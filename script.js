@@ -6,6 +6,26 @@ if (currentYear) {
   currentYear.textContent = new Date().getFullYear();
 }
 
+function initScrollReveal() {
+  const revealElements = document.querySelectorAll('.scroll-reveal');
+  if (!revealElements.length || !window.IntersectionObserver) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('reveal-visible');
+      obs.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -10% 0px'
+  });
+
+  revealElements.forEach(el => observer.observe(el));
+}
+
+window.addEventListener('DOMContentLoaded', initScrollReveal);
+
 // 渲染最近的新项目（如无 JS 则不会显示）
 const projects = [
   {
@@ -30,9 +50,9 @@ const projects = [
 
 const projectsList = document.getElementById('projectsList');
 if (projectsList && projects.length) {
-  projects.forEach(p => {
+  projects.forEach((p, index) => {
     const article = document.createElement('article');
-    article.className = 'post-card';
+    article.className = `post-card scroll-reveal scroll-delay-${100 + (index * 100)}`;
     article.innerHTML = `
       <span class="post-tag">${p.tag}</span>
       <h3>${p.title}</h3>
