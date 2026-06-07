@@ -104,6 +104,14 @@ a {
   cursor: pointer;
 }
 
+.nav-icon-img {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+}
+
 .main-nav {
   display: flex;
   align-items: center;
