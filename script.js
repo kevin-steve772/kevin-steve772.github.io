@@ -24,7 +24,12 @@ function initScrollReveal() {
   revealElements.forEach(el => observer.observe(el));
 }
 
-window.addEventListener('DOMContentLoaded', initScrollReveal);
+// 确保在 DOM 加载完毕后初始化（处理脚本在 </body> 前的情况）
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initScrollReveal);
+} else {
+  initScrollReveal();
+}
 
 // 渲染最近的新项目（如无 JS 则不会显示）
 const projects = [
