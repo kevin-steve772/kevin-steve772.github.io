@@ -43,7 +43,7 @@ const projects = [
     tag: '主页',
     title: 'kevin-steve-772.github.io',
     desc: '我的个人主页，完全开源。',
-    link: 'https://github.com/kevin-steve772/kevin-steve722.github.io'
+    link: 'https://github.com/kevin-steve772/kevin-steve772.github.io'
   },
   {
     tag: '敬请期待',
