@@ -115,7 +115,6 @@ if (projectsList && projects.length) {
         if (resetTimer) clearTimeout(resetTimer);
         resetTimer = setTimeout(() => {
             if (clickCount > 0 && clickCount < 10) {
-                // 未满10次，超时重置但不打扰用户，但是也可以给一点提示？
                 clickCount = 0;
             }
             resetTimer = null;

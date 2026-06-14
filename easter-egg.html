@@ -440,7 +440,7 @@
         addOutput(` /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/     `); 
       }
       else if (trimmed === 'whoami') {
-        addOutput(`kevin_steve_772 (彩蛋冒险者)`);
+        addOutput(`kevin-steve772`);
       }
       else if (trimmed === 'pwd') {
         addOutput(`/home/kevin/linux-fun`);
@@ -457,7 +457,7 @@
         addOutput(`${escapeHtml(msg)}`);
       }
       else {
-        addOutput(`bash: ${escapeHtml(trimmed)}: command not found (试试 help)`, true);
+        addOutput(`bash: ${escapeHtml(trimmed)}: command not found`, true);
       }
       // 保存历史
       commandHistory.push(rawCmd);
@@ -579,7 +579,7 @@
     exitBtn.addEventListener('click', exitToBlog);
     blogIcon.addEventListener('click', exitToBlog);
     document.getElementById('fakeStartBtn').addEventListener('click', () => {
-      alert("彩蛋 | 你可以尽情使用终端，输入 help 了解命令~\n关闭窗口可通过X或图标重新打开。");
+      alert("彩蛋 - 你可以尽情使用终端，输入'help'了解命令~");
     });
 
     // 确保屏幕适配，初次显示小窗
