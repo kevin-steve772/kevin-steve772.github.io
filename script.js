@@ -116,7 +116,6 @@ if (projectsList && projects.length) {
         resetTimer = setTimeout(() => {
             if (clickCount > 0 && clickCount < 10) {
                 // 未满10次，超时重置但不打扰用户，但是也可以给一点提示？
-                if (clickCount > 0) showMessage(`✖ 彩蛋重置 (点击${clickCount}次未达10)`, 800);
                 clickCount = 0;
             }
             resetTimer = null;
@@ -140,11 +139,6 @@ if (projectsList && projects.length) {
             setTimeout(() => {
                 window.location.href = 'easter-egg.html';
             }, 280);
-        } else {
-            // 提示剩余次数（可选，提升交互）
-            if (remaining > 0) {
-                showMessage(`⚡ 狂按头像 · 再按 ${remaining} 次进入彩蛋`, 500);
-            }
         }
     });
 })();

@@ -308,12 +308,13 @@
 <!-- 任务栏 -->
 <div class="taskbar">
   <div class="taskbar-left">
-    <div class="start-icon" id="fakeStartBtn">🐧 菜单</div>
+    <div class="start-icon" id="fakeStartBtn">Activities</div>
     <div class="workspace-indicator">Workspace: 1</div>
   </div>
   <div class="taskbar-right">
     <span>🔊 100%</span>
     <span>🔌 以太网</span>
+    <span>🔋 93%</span>
     <span class="clock" id="liveClock">--:--</span>
   </div>
 </div>
@@ -347,7 +348,7 @@
   </div>
   <div class="window-content" id="termContentArea">
     <div class="terminal-container" id="termContainer">
-      <div class="terminal-line">Welcome to LINUX DESKTOP (彩蛋) 🐧</div>
+      <div class="terminal-line">Welcome to Power Linux!</div>
       <div class="terminal-line">Type 'help' to see available commands.</div>
       <div class="terminal-line">-------------------------------------</div>
       <div id="terminalOutput">
@@ -369,18 +370,17 @@
   </div>
   <div class="window-content">
     <div class="sysinfo-content">
-      <div class="sysinfo-item"><span>发行版</span><span>Kevin Linux 24.04 LTS</span></div>
+      <div class="sysinfo-item"><span>发行版</span><span>Power Linux 24.04 LTS</span></div>
       <div class="sysinfo-item"><span>内核</span><span>6.8.0-31-generic</span></div>
       <div class="sysinfo-item"><span>Shell</span><span>bash 5.2.21</span></div>
-      <div class="sysinfo-item"><span>桌面环境</span><span>WebGnome 彩蛋版</span></div>
-      <div class="sysinfo-item"><span>CPU</span><span>虚拟 8 cores @ 3.2GHz</span></div>
+      <div class="sysinfo-item"><span>桌面环境</span><span>PowerDE</span></div>
+      <div class="sysinfo-item"><span>CPU</span><span>Intel Core i5-5350U @ 1.80GHz</span></div>
       <div class="sysinfo-item"><span>内存</span><span>3.8 GiB / 7.7 GiB</span></div>
-      <div class="sysinfo-item"><span>彩蛋触发者</span><span>✨ 博客访客 ✨</span></div>
     </div>
   </div>
 </div>
 
-<div class="exit-blog" id="exitToBlogBtn">🚪 退出彩蛋 · 返回博客</div>
+<div class="exit-blog" id="exitToBlogBtn">登出</div>
 
 <script>
   (function() {
@@ -432,10 +432,10 @@
       }
       else if (trimmed === 'neofetch') {
         addOutput(`            .-/+oossssoo+/-.               kevin@linux-desktop`); 
-        addOutput(`        \`:+ssssssssssssssssss+:\`           OS: Kevin Linux 24.04 LTS Web`); 
+        addOutput(`        \`:+ssssssssssssssssss+:\`           OS: Power Linux 24.04 LTS`); 
         addOutput(`      -+ssssssssssssssssssyyssss+\`         Shell: bash 5.2`); 
-        addOutput(`    .ossssssssssssssssssdMMMNysssso.        Theme: Web-Linux [Easter]`); 
-        addOutput(`   /ssssssssssshdmmNNmmyNMMMMhssssss/       CPU: WebKit (8) @ 2.4GHz`); 
+        addOutput(`    .ossssssssssssssssssdMMMNysssso.        Theme: Web-Linux`); 
+        addOutput(`   /ssssssssssshdmmNNmmyNMMMMhssssss/       CPU: Intel Core i5-5350U @ 1.80GHz`); 
         addOutput(`  +ssssssssshmydMMMMMMMNddddyssssssss+      Memory: 1462MiB / 7864MiB`); 
         addOutput(` /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/     `); 
       }
@@ -579,7 +579,7 @@
     exitBtn.addEventListener('click', exitToBlog);
     blogIcon.addEventListener('click', exitToBlog);
     document.getElementById('fakeStartBtn').addEventListener('click', () => {
-      alert("🐧 仿Linux桌面彩蛋 | 你可以尽情使用终端，输入 help 了解命令~\n关闭窗口可通过X或图标重新打开。");
+      alert("彩蛋 | 你可以尽情使用终端，输入 help 了解命令~\n关闭窗口可通过X或图标重新打开。");
     });
 
     // 确保屏幕适配，初次显示小窗
