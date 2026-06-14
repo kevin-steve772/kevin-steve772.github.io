@@ -35,10 +35,10 @@ const projects = [
     link: 'https://github.com/kevin-steve772/console-ui'
   },
   {
-    tag: '主页',
-    title: 'kevin-steve-772.github.io',
-    desc: '我的个人主页，完全开源。',
-    link: 'https://github.com/kevin-steve772/kevin-steve722.github.io'
+    tag: '小游戏',
+    title: 'UNO CLI',
+    desc: '基于控制台的一个UNO游戏。',
+    link: 'https://github.com/kevin-steve772/uno_cli'
   },
   {
     tag: '敬请期待',
