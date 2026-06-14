@@ -1,12 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>错误</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 · 页面未找到 | Kevin Steve 772 的开发者博客</title>
+  <meta name="robots" content="noindex, follow" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-    <h1>404</h1>
-    <h3>Not Found</h3>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="split-nav">
+        <div class="split-nav-group split-nav-left">
+          <button class="nav-icon" aria-label="展开站点标题"><img src="/logo.png" alt="站点 logo" class="nav-icon-img" /></button>
+          <nav class="main-nav left-nav" id="leftNav">
+            <a class="nav-title">Kevin Steve 772</a>
+            <a class="nav-subtitle">个人博客</a>
+          </nav>
+        </div>
+        <div class="split-nav-group split-nav-right">
+          <button class="nav-icon" aria-label="展开右侧导航">⫶</button>
+          <nav class="main-nav right-nav" id="rightNav">
+            <a href="/" class="scroll-reveal scroll-delay-100">Home</a>
+            <a href="/#posts" class="scroll-reveal scroll-delay-200">Blog</a>
+            <a href="/#about" class="scroll-reveal scroll-delay-300">About</a>
+            <a href="/#contact" class="scroll-reveal scroll-delay-400">Contact</a>
+            <a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer" class="scroll-reveal scroll-delay-500">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section error-section" id="error-page">
+      <div class="container">
+        <div class="error-content scroll-reveal scroll-delay-100">
+          <div class="error-code">
+            <span>4</span>
+            <span class="error-glitch">0</span>
+            <span>4</span>
+          </div>
+          <h2>页面走丢了……</h2>
+          <p>你访问的链接可能已被移除、更名或暂时不可用。<br>不过别担心，博客里还有很多有趣的内容等着你。</p>
+          <div class="error-actions">
+            <a href="/" class="btn btn-primary">← 返回首页</a>
+            <a href="/#posts" class="btn btn-outline">📖 浏览最新文章</a>
+          </div>
+          <div class="error-hint">
+            <span>💡 你也可以：</span>
+            <a href="/#projects">逛逛开源项目</a>
+            <a href="https://github.com/kevin-steve772" target="_blank" rel="noreferrer">GitHub 主页</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="currentYear"></span> Kevin Steve 772 | 开发者个人博客</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+  <style>
+    /* 仅针对 404 页面的额外微调，完全继承原风格 */
+    .error-section {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 0 5rem;
+    }
+    .error-content {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .error-code {
+      font-size: clamp(5rem, 12vw, 9rem);
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      color: #58a6ff;
+      text-shadow: 0 0 12px rgba(88,166,255,0.3);
+    }
+    .error-glitch {
+      animation: glitch 0.8s infinite alternate;
+    }
+    @keyframes glitch {
+      0% { transform: skew(0deg); opacity: 1; text-shadow: -2px 0 #ff4d4d; }
+      100% { transform: skew(3deg); opacity: 0.9; text-shadow: 2px 0 #4d4dff; }
+    }
+    .error-content h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin: 0.5rem 0 0.75rem;
+      background: linear-gradient(135deg, #f0f4fa, #9fb4c8);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .error-content p {
+      color: #b7c3d1;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(88,166,255,0.5);
+      color: #58a6ff;
+      transition: all 0.2s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(88,166,255,0.1);
+      transform: translateY(-1px);
+      border-color: #58a6ff;
+    }
+    .error-hint {
+      font-size: 0.9rem;
+      color: #8b98ab;
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .error-hint a {
+      color: #58a6ff;
+      border-bottom: 1px dashed rgba(88,166,255,0.4);
+    }
+    .error-hint a:hover {
+      border-bottom-color: #58a6ff;
+    }
+    @media (max-width: 640px) {
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      .error-hint {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+    }
+  </style>
 </body>
 </html>
