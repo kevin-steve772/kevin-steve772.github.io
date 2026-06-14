@@ -62,3 +62,89 @@ if (projectsList && projects.length) {
     projectsList.appendChild(article);
   });
 }
+(function() {
+    // 彩蛋触发：左上角圆形头像 (class="nav-icon" 位于 .split-nav-left 内)
+    let clickCount = 0;
+    let resetTimer = null;
+    let isRedirecting = false;       // 防止跳转过程中重复触发
+
+    const avatarBtn = document.querySelector('.split-nav-left .nav-icon');
+    if (!avatarBtn) {
+        console.warn('未找到头像按钮，彩蛋功能无法绑定');
+        return;
+    }
+
+    // 可选：轻提示浮层样式 (临时)
+    const toastStyle = document.createElement('style');
+    toastStyle.textContent = `
+        .easter-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            color: #7ef0ba;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: monospace;
+            z-index: 9999;
+            pointer-events: none;
+            border-left: 3px solid #58a6ff;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+            transition: opacity 0.2s;
+        }
+    `;
+    document.head.appendChild(toastStyle);
+
+    function showMessage(msg, duration = 1200) {
+        let toast = document.querySelector('.easter-toast');
+        if (toast) toast.remove();
+        const div = document.createElement('div');
+        div.className = 'easter-toast';
+        div.textContent = msg;
+        document.body.appendChild(div);
+        setTimeout(() => {
+            if (div && div.remove) div.remove();
+        }, duration);
+    }
+
+    function resetCounter() {
+        if (resetTimer) clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+            if (clickCount > 0 && clickCount < 10) {
+                // 未满10次，超时重置但不打扰用户，但是也可以给一点提示？
+                if (clickCount > 0) showMessage(`✖ 彩蛋重置 (点击${clickCount}次未达10)`, 800);
+                clickCount = 0;
+            }
+            resetTimer = null;
+        }, 800);  // 0.8秒内未点则重置计数，符合“狂按”连击设定
+    }
+
+    avatarBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isRedirecting) return;
+
+        clickCount++;
+        resetCounter();
+
+        const remaining = 10 - clickCount;
+        if (clickCount === 10) {
+            // 触发彩蛋
+            isRedirecting = true;
+            showMessage('🎉 彩蛋激活！进入 Linux 桌面... 🐧', 1500);
+            // 清除定时器防止跳转后仍重置
+            if (resetTimer) clearTimeout(resetTimer);
+            setTimeout(() => {
+                window.location.href = 'easter-egg.html';
+            }, 280);
+        } else {
+            // 提示剩余次数（可选，提升交互）
+            if (remaining > 0) {
+                showMessage(`⚡ 狂按头像 · 再按 ${remaining} 次进入彩蛋`, 500);
+            }
+        }
+    });
+})();
