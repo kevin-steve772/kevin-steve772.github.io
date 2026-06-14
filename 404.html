@@ -38,7 +38,7 @@
         <div class="error-content scroll-reveal scroll-delay-100">
           <div class="error-code">
             <span>4</span>
-                <span class="error-glitch">☹️</span>
+            <span class="error-glitch">☹️</span>
             <span>4</span>
           </div>
           <h2>页面走丢了……</h2>
@@ -65,7 +65,7 @@
 
   <script src="/script.js"></script>
   <style>
-    /* 仅针对 404 页面的额外微调，完全继承原风格 */
+    /* 仅针对 404 页面的微调 */
     .error-section {
       min-height: 60vh;
       display: flex;
@@ -90,38 +90,11 @@
       text-shadow: 0 0 12px rgba(88,166,255,0.3);
     }
     .error-glitch {
-      animation: glitch 0.6s infinite alternate;
       display: inline-block;
-    }
-
-    @keyframes glitch {
-     0% {
-      transform: translate(0, 0) skew(0deg);
-      text-shadow: -3px 0 #ff3366, 3px 0 #33ff66;
-      opacity: 1;
-     }
-     20% {
-       transform: translate(-2px, 1px) skew(2deg);
-       text-shadow: -4px 0 #ff3366, 4px 0 #33ccff;
-     }
-     40% {
-       transform: translate(2px, -1px) skew(-2deg);
-       text-shadow: 4px 0 #ff3366, -4px 0 #33ff66;
-       opacity: 0.9;
-     }
-     60% {
-       transform: translate(-1px, 2px) skew(1deg);
-       text-shadow: -2px 0 #ffcc33, 2px 0 #33ffcc;
-     }
-     80% {
-       transform: translate(1px, -2px) skew(-1deg);
-       text-shadow: 3px 0 #ff33cc, -3px 0 #66ff33;
-     }
-     100% {
-       transform: translate(0, 0) skew(0deg);
-       text-shadow: -3px 0 #ff3366, 3px 0 #33aaff;
-       opacity: 1;
-     }
+      position: relative;
+      line-height: 1;
+      vertical-align: middle;
+      /* 原有的 CSS 动画已移除，改用 Canvas 随机故障 */
     }
     .error-content h2 {
       font-size: clamp(1.8rem, 4vw, 2.5rem);
@@ -182,5 +155,131 @@
       }
     }
   </style>
+
+  <!-- Canvas 随机故障脚本：横向切割 + 随机偏移 + 随机颜色滤镜 -->
+  <script>
+    (function() {
+      const glitchSpan = document.querySelector('.error-glitch');
+      if (!glitchSpan) return;
+
+      const originalText = glitchSpan.innerText;   // 拿到 ☹️
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      canvas.style.display = 'inline-block';
+      canvas.style.verticalAlign = 'middle';
+      canvas.style.borderRadius = 'inherit';
+
+      // 继承父元素的字体样式
+      const computedStyle = window.getComputedStyle(glitchSpan);
+      canvas.style.fontFamily = computedStyle.fontFamily;
+      canvas.style.fontWeight = computedStyle.fontWeight;
+      canvas.style.fontSize = computedStyle.fontSize;
+      canvas.style.lineHeight = computedStyle.lineHeight;
+
+      glitchSpan.innerText = '';
+      glitchSpan.appendChild(canvas);
+
+      let textWidth = 0, textHeight = 0;
+      function measureText() {
+        ctx.font = `${computedStyle.fontWeight} ${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+        const metrics = ctx.measureText(originalText);
+        textWidth = metrics.width;
+        const fontSizePx = parseFloat(computedStyle.fontSize);
+        textHeight = fontSizePx * 1.2;
+        canvas.width = textWidth + 20;
+        canvas.height = textHeight + 20;
+        canvas.style.width = `${canvas.width}px`;
+        canvas.style.height = `${canvas.height}px`;
+      }
+      measureText();
+
+      function random(min, max) {
+        return min + Math.random() * (max - min);
+      }
+
+      function drawGlitchFrame() {
+        if (canvas.width === 0) measureText();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const stripCount = Math.floor(random(4, 12));  // 随机切割 4~12 条
+        const stripHeight = canvas.height / stripCount;
+
+        for (let i = 0; i < stripCount; i++) {
+          const y = i * stripHeight;
+          const h = stripHeight;
+
+          // 随机左右偏移 (-18px ~ 18px)
+          const xOffset = random(-18, 18);
+
+          // 随机颜色滤镜：RGB 各通道随机，叠加半透明彩色层
+          const r = Math.floor(random(100, 255));
+          const g = Math.floor(random(100, 255));
+          const b = Math.floor(random(100, 255));
+          const alpha = random(0.2, 0.6);
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(0, y, canvas.width, h);
+          ctx.clip();
+
+          ctx.clearRect(0, y, canvas.width, h);
+          ctx.font = `${computedStyle.fontWeight} ${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const centerX = canvas.width / 2 + xOffset;
+          const centerY = canvas.height / 2;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(originalText, centerX, centerY);
+
+          // 叠加随机彩色半透明层 (颜色混合模式)
+          ctx.globalCompositeOperation = 'color';
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+          ctx.fillRect(0, y, canvas.width, h);
+
+          // 再叠加一层亮度随机层，增强故障感
+          ctx.globalCompositeOperation = 'overlay';
+          const brightness = random(0.1, 0.4);
+          ctx.fillStyle = `rgba(255, 255, 255, ${brightness})`;
+          ctx.fillRect(0, y, canvas.width, h);
+
+          ctx.restore();
+        }
+
+        // 可选：整体添加极轻微的 RGB 差异效果
+        ctx.save();
+        ctx.globalCompositeOperation = 'difference';
+        ctx.fillStyle = `rgba(255, 0, 0, 0.08)`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+
+      let timeoutId = null;
+      function scheduleNextFrame() {
+        const delay = random(40, 150);  // 随机间隔 40~150ms
+        timeoutId = setTimeout(() => {
+          drawGlitchFrame();
+          scheduleNextFrame();
+        }, delay);
+      }
+
+      scheduleNextFrame();
+
+      // 页面隐藏时暂停，节省资源
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (timeoutId) clearTimeout(timeoutId);
+        } else {
+          if (!timeoutId) scheduleNextFrame();
+        }
+      });
+
+      // 窗口尺寸变化时重新测量（极少需要，但保留）
+      window.addEventListener('resize', () => {
+        measureText();
+        drawGlitchFrame();
+      });
+    })();
+  </script>
 </body>
 </html>
